@@ -2,6 +2,7 @@ package com.company.ziplink.services;
 
 import com.company.ziplink.models.User;
 import com.company.ziplink.repositories.UserRepository;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,6 +25,7 @@ public class UserServiceTests {
     @InjectMocks
     private UserService userService;
 
+    @Test
     void mustCreateUserWithUniqueEmail() {
         when(userRepository.existsUserByEmail(fakeUser().getEmail())).thenReturn(false);
         when(userRepository.save(fakeUser())).thenReturn(fakeUser());
