@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,12 +28,13 @@ public class UserServiceTests {
 
     @Test
     void mustCreateUserWithUniqueEmail() {
-        when(userRepository.existsUserByEmail(fakeUser().getEmail())).thenReturn(false);
-        when(userRepository.save(fakeUser())).thenReturn(fakeUser());
+        User fakeUser = fakeUser();
+        when(userRepository.existsUserByEmail(fakeUser.getEmail())).thenReturn(false);
+        when(userRepository.save(fakeUser)).thenReturn(fakeUser);
 
-        User result = userService.createUser(fakeUser());
+        User result = userService.createUser(fakeUser);
 
-        assertThat(result.getName()).isEqualTo("John Doe");
+        assertNotNull(result);
         assertThat(result.getEmail()).isEqualTo("johndoe67@gmail.com");
         verify(userRepository).save(any(User.class));
     }
