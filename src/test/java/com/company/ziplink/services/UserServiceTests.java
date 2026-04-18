@@ -1,5 +1,7 @@
 package com.company.ziplink.services;
 
+import com.company.ziplink.DTOs.UserPostRequestDTO;
+import com.company.ziplink.DTOs.UserPostResponseDTO;
 import com.company.ziplink.models.User;
 import com.company.ziplink.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,24 +31,16 @@ public class UserServiceTests {
 
     @Test
     void mustCreateUserWithUniqueEmail() {
-        User fakeUser = fakeUser();
-        when(userRepository.existsUserByEmail(fakeUser.getEmail())).thenReturn(false);
-        when(userRepository.save(fakeUser)).thenReturn(fakeUser);
+        UserPostRequestDTO fakeRequest = new UserPostRequestDTO("John Doe", "john.doe@gmail.com", "test123");
+        User fakeUser = new User(UUID.randomUUID(), "John Doe", "john.doe@gmail.com", "test123", LocalDateTime.now());
 
-        User result = userService.createUser(fakeUser);
+        when(userRepository.existsUserByEmail(fakeRequest.email())).thenReturn(false);
+        when(userRepository.save(any(User.class))).thenReturn(fakeUser);
+
+        UserPostResponseDTO result = userService.createUser(fakeRequest);
 
         assertNotNull(result);
-        assertThat(result.getEmail()).isEqualTo("johndoe67@gmail.com");
+        assertThat(result.email()).isEqualTo("john.doe@gmail.com");
         verify(userRepository).save(any(User.class));
-    }
-
-    private User fakeUser() {
-        User user = new User();
-        user.setId(UUID.randomUUID());
-        user.setName("John Doe");
-        user.setEmail("johndoe67@gmail.com");
-        user.setPassword("test123");
-        user.setCreatedAt(new Date());
-        return user;
     }
 }

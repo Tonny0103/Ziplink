@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -31,5 +31,5 @@ public class User {
     private String password;
 
     @Column(name = "created_at", columnDefinition = "timestamp", insertable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }
