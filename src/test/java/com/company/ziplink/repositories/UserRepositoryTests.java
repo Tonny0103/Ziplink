@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +15,23 @@ public class UserRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Test
+    void mustReturnTrueIfUserExistsByEmail() {
+        User user = new User(
+                null,
+                "John Doe",
+                "test@gmail.com",
+                "secret123",
+                LocalDateTime.now()
+        );
+
+        userRepository.save(user);
+
+        boolean result = userRepository.existsUserByEmail("test@gmail.com");
+
+        assertThat(result).isTrue();
+    }
 
     @Test
     void mustSaveAndRetrieveUser() {
