@@ -17,6 +17,24 @@ public class UserRepositoryTests {
     private UserRepository userRepository;
 
     @Test
+    void mustReturnUserIfFoundByName() {
+        User user = new User(
+                null,
+                "John Wick",
+                "john.wick@gmail.com",
+                "secret123",
+                LocalDateTime.now()
+        );
+
+        userRepository.save(user);
+
+        Optional<User> result = userRepository.findByName("John Wick");
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getName()).isEqualTo("John Wick");
+    }
+
+    @Test
     void mustReturnTrueIfUserExistsByEmail() {
         User user = new User(
                 null,
