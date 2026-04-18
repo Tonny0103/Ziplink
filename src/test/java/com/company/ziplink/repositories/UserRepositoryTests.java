@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,6 +17,17 @@ public class UserRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Test
+    void mustReturnAllUsers() {
+        List<User> users = usersForFindAllTest();
+        userRepository.saveAll(users);
+
+        List<User> result = userRepository.findAll();
+
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(5);
+    }
 
     @Test
     void mustReturnUserIfFoundByName() {
@@ -69,5 +82,21 @@ public class UserRepositoryTests {
     void mustReturnEmptyForNonExisentUser() {
         Optional<User> result = userRepository.findByName("Doesn't Exists");
         assertThat(result).isEmpty();
+    }
+
+    private List<User> usersForFindAllTest() {
+        List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            User user = new User();
+            user.setId(null);
+            user.setName("John Doe " + i);
+            String email = "john.doe" + i + "@gmail.com";
+            user.setEmail(email);
+            user.setPassword("test123");
+            users.add(user);
+        }
+
+        return users;
     }
 }
