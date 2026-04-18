@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +43,20 @@ public class UserServiceTests {
         assertNotNull(result);
         assertThat(result.email()).isEqualTo("john.doe@gmail.com");
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void mustGetUserByName() {
+        UserGetFilterDTO filter = new UserGetFilterDTO("John Doe");
+        Optional<User> fakeUser = Optional.of(fakeUser());
+
+        when(userRepository.findUserByName(filter.name())).thenReturn(fakeUser);
+
+        userRepository.save(fakeUser);
+        Optional<User> result = userService.getUserByName(filter.name());
+
+        assertThat(result).isPresent();
+        assertThat(result.get().name()).isEqualTo("John Doe");
     }
 
     private UserPostRequestDTO fakeRequest() {
