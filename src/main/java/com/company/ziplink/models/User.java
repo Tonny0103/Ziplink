@@ -27,7 +27,7 @@ public class User {
     @Column(name = "email", columnDefinition = "text", unique = true)
     private String email;
 
-    @Column(name = "password", columnDefinition = "text", unique = true)
+    @Column(name = "password", columnDefinition = "text")
     private String password;
 
     @Column(name = "created_at", columnDefinition = "timestamp", insertable = false, updatable = false)
