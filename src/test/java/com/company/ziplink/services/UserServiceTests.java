@@ -31,8 +31,8 @@ public class UserServiceTests {
 
     @Test
     void mustCreateUserWithUniqueEmail() {
-        UserPostRequestDTO fakeRequest = new UserPostRequestDTO("John Doe", "john.doe@gmail.com", "test123");
-        User fakeUser = new User(UUID.randomUUID(), "John Doe", "john.doe@gmail.com", "test123", LocalDateTime.now());
+        UserPostRequestDTO fakeRequest = fakeRequest();
+        User fakeUser = fakeUser();
 
         when(userRepository.existsUserByEmail(fakeRequest.email())).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(fakeUser);
@@ -42,5 +42,13 @@ public class UserServiceTests {
         assertNotNull(result);
         assertThat(result.email()).isEqualTo("john.doe@gmail.com");
         verify(userRepository).save(any(User.class));
+    }
+
+    private UserPostRequestDTO fakeRequest() {
+        return new UserPostRequestDTO("John Doe", "john.doe@gmail.com", "test123");
+    }
+
+    private User fakeUser() {
+        return new User(UUID.randomUUID(), "John Doe", "john.doe@gmail.com", "test123", LocalDateTime.now());
     }
 }
